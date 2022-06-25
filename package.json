@@ -1,7 +1,6 @@
 {
   "name": "previsao-do-tempo-react",
-  "private": false,
-  "homepage": "https://Mpetrato.github.io/previsao-do-tempo-react",
+  "private": true,
   "version": "0.0.0",
   "scripts": {
     "start": "vite",
