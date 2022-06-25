@@ -2,7 +2,7 @@ import { BsWind, BsSunrise, BsSunset } from 'react-icons/bs'
 import { WiHumidity } from 'react-icons/wi'
 
 import * as C from './styles'
-import { useParams } from "react-router-dom"
+import { useNavigate, useNavigationType, useParams } from "react-router-dom"
 import { Header } from '../../components/Header';
 import { useEffect, useState } from 'react';
 import { api } from '../../api/api';
@@ -13,8 +13,10 @@ export const CityForecast = () => {
 
 
     const [cityInfo, setCityInfo] = useState<TCityInfo | null>(null)
+    const [error, setError] = useState(false);
 
     const { city } = useParams();
+    const navigate = useNavigate();
 
     const actualTemp = (Number(cityInfo?.main.temp) - 273).toFixed(0);
     const maxTemp = (Number(cityInfo?.main.temp_max) - 273).toFixed(0);
@@ -39,9 +41,13 @@ export const CityForecast = () => {
 
     useEffect(() => {
         api.searchCity(city!)
-        .then(res => {
-            console.log(res)
-            setCityInfo(res)
+        .then((res) => {
+            if(res) {
+                console.log(res)
+                setCityInfo(res)
+            } else {
+                navigate('/')
+            }
         })
     }, [])
 
@@ -99,8 +105,11 @@ export const CityForecast = () => {
                     </C.InfoWrapper>
                 </>
             }
-            {!cityInfo && 
+            {!cityInfo && !error && 
                 <div>Carregando....</div>
+            }
+            {error && 
+                <div>Cidade não encontrada...</div>
             }
             </C.ForecastWrapper>
             <C.Footer>
